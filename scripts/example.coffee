@@ -70,6 +70,18 @@ module.exports = (robot) ->
       robot.messageRoom roomId, "<@#{getUserId(to)}> Your！"
       resolve()
 
+  sendWroteMessage = (to) ->
+    new Promise (resolve) ->
+      robot.messageRoom roomId, "<@#{getUserId(to)}> Registered"
+
+  sendAlreadyWroteMessage = (to) ->
+    new Promise (resolve) ->
+      robot.messageRoom roomId, "<@#{getUserId(to)}> Already"
+    
+  sendPICNotYetDecidedMessage = (to) ->
+    new Promise (resolve) ->
+      robot.messageRoom roomId, "<@#{getUserId(to)}> Not yet decided"
+
   getUserId = (name) ->
     for key of users
       if name == users[key].real_name
@@ -105,14 +117,29 @@ module.exports = (robot) ->
     members = docs
     setTimeout(routine, 1000)
 
-  #####################
-  # TOOD: URL 付きメンションを listen して url をアップデート
-  #####################
+  #
+  # URL 付きメンションを listen して url をアップデート
+  #
+  # 現在の月の PIC を取得
+  # url が設定されてないか確認
+  # PIC とメンションしてきた人が同じかどうか確認
+  # 一致すれば update
+  robot.respond /(h?ttps?:\/\/[-a-zA-Z0-9@:%_\+.~#?&\/=]+)/i, (res) ->
+    mentioner = res.message.user.real_name
+    url = res.match[1]
+    now = new Date()
+    currentDate = format now, 'yyyy-MM'
 
-
-
-
-
+    fetchPIC(currentDate)
+    .then (pic) ->
+      if !pic
+        sendPICNotYetDecidedMessage(mentioner)
+        return Promise.reject()
+      if pic.url != ''
+        sendAlreadyWroteMessage(mentioner)
+        return Promise.reject()
+    .then () -> setDateURL(currentDate, url)
+    .then () -> sendWroteMessage(mentioner)
 
   # robot.hear /badger/i, (res) ->
   #   robot.logger.debug "Received message #{res.message.text}"
