@@ -107,11 +107,11 @@ module.exports = (robot) ->
           console.log doc
           sendRemindMessage doc.pic
 
-    #####################
-    # TODO: 毎週金曜日に routine を再起呼び出し (epoch で計算して setTimeout)
-    #####################
-    # nextTime = ...
-    # setTimeout routine, nextTime
+    # 毎週金曜日 11:00 に routine を再起呼び出し (epoch で計算して setTimeout)
+    d = new Date(Date.now() + ((5 - new Date().getDay()) * 1000 * 60 * 60 * 24))
+    nextDate = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 11, 0)
+    nextTime = nextDate.getTime() - Date.now()
+    setTimeout routine, nextTime
 
   db.members.find {}, (err, docs) ->
     members = docs
