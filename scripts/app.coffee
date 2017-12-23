@@ -106,7 +106,7 @@ module.exports = (robot) ->
         # 今月の pic が設定されていない場合は members からランダムに選択して設定
         person = members[Math.floor(Math.random() * members.length)]
         pic.setPerson(person.id)
-        message.sendPersonDecided pic.id
+        message.sendPersonDecided person.id
       else
         if !doc.url
           message.sendRemind(doc.pic)
