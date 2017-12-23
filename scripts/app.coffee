@@ -66,25 +66,25 @@ class Message
 
   sendRemind: (to) =>
     new Promise (resolve) =>
-      @robot.messageRoom roomId, "<@#{@getUserId(to)}> not yet"
+      @robot.messageRoom roomId, "<@#{@getUserId(to)}> 記事書きましたかー？書いたら私に URL つけてメンションしてね！書いてくれるとボット的には嬉しいです！"
       resolve()
 
   sendPersonDecided: (to) =>
     new Promise (resolve) =>
-      @robot.messageRoom roomId, "<@#{@getUserId(to)}> Your！"
+      @robot.messageRoom roomId, "<@#{@getUserId(to)}> 今月の担当ですよ！書いたら私に URL つけてメンションしてね！"
       resolve()
 
   sendURLRegistered: (to) =>
     new Promise (resolve) =>
-      @robot.messageRoom roomId, "<@#{@getUserId(to)}> Registered"
+      @robot.messageRoom roomId, "<@#{@getUserId(to)}> URL 確認しました！書いてくれてありがとう！！次もよろしくね！"
 
   sendURLAlreadyRegistered: (to) =>
     new Promise (resolve) =>
-      @robot.messageRoom roomId, "<@#{@getUserId(to)}> Already"
+      @robot.messageRoom roomId, "<@#{@getUserId(to)}> あれ？すでに書いてますよね！？次回もよろしくね！"
 
   sendPersonNotYetDecided: (to) =>
     new Promise (resolve) =>
-      @robot.messageRoom roomId, "<@#{@getUserId(to)}> Not yet decided"
+      @robot.messageRoom roomId, "<@#{@getUserId(to)}> まだ今月の担当は決めてないです！チョット待っててください！"
 
 
 module.exports = (robot) ->
