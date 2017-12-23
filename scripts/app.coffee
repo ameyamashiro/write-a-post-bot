@@ -109,7 +109,6 @@ module.exports = (robot) ->
         message.sendPersonDecided pic.id
       else
         if !doc.url
-          console.log doc
           message.sendRemind(doc.pic)
 
     # 毎週金曜日 11:00 に routine を再起呼び出し (epoch で計算して setTimeout)
