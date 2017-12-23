@@ -1,6 +1,6 @@
-![Blog Kaite Bot](./images/icon.png)
-
 # write-blog-bot
+
+![Blog Kaite Bot](./images/icon.png)
 
 A reminder bot for a monthly blog post.
 
