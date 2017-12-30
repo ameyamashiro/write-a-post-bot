@@ -86,6 +86,18 @@ class Message
     new Promise (resolve) =>
       @robot.messageRoom roomId, "<@#{@getUserId(to)}> まだ今月の担当は決めてないです！チョット待っててください！"
 
+  sendError: () =>
+    @robot.messageRoom roomId, "エラーが発生してしまったようです"
+
+  send: (message) =>
+    new Promise (resolve) =>
+      @robot.messageRoom roomId, message
+
+  sendTo: (to, message) =>
+    new Promise (resolve) =>
+      @robot.messageRoom roomId, "<@#{@getUserId(to)}> #{message}"
+
+
 
 module.exports = (robot) ->
   message = new Message robot
@@ -145,3 +157,28 @@ module.exports = (robot) ->
         return Promise.reject()
     .then () -> pic.setURL(url)
     .then () -> message.sendURLRegistered mentioner
+
+  robot.respond /(メンバー|members?)/i, (res) ->
+    mentioner = res.message.user.real_name
+    db.members.find {}, (err, docs) =>
+      if (err)
+        message.sendError()
+      people = ''
+      docs.forEach (e) =>
+        people += "\n#{e.id}"
+      message.send people
+
+  robot.respond /(登録|register) ([a-zA-Z]+)/i, (res) ->
+    mentioner = res.message.user.real_name
+    db.members.insert [
+      {
+        id: res.match[1]
+      }
+    ], (err, newDocs) =>
+      if (err)
+        message.sendError()
+      message.sendTo mentioner, "#{res.match[1]} 追加登録完了しました！"
+
+  # robot.respond /(.*)/, (res) ->
+  #   mentioner = res.message.user.real_name
+  #   message.send mentioner, 'どうしましたかー？'
